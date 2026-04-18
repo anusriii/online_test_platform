@@ -35,7 +35,11 @@ const getTestById = async (req, res) => {
 
 const updateTest = async (req, res) => {
   try {
-    const test = await Test.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updateData = { ...req.body };
+    if (updateData.questions) {
+      updateData.totalMarks = updateData.questions.length;
+    }
+    const test = await Test.findByIdAndUpdate(req.params.id, updateData, { new: true });
     if (!test) return res.status(404).json({ message: 'Test not found' });
     res.json(test);
   } catch (error) {

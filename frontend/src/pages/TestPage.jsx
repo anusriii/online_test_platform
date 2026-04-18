@@ -17,6 +17,7 @@ const TestPage = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [violations, setViolations] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
 
   const handleSubmit = useCallback(async () => {
     if (submitting) return;
@@ -35,14 +36,16 @@ const TestPage = () => {
     }
   }, [submitting, test, answers, id, navigate]);
 
-  useFullscreen((message) => {
+  const handleViolation = useCallback((message) => {
     setViolations((prev) => {
       const newCount = prev + 1;
       toast.warn(`${message} Warning ${newCount}/3`);
       if (newCount >= 3) handleSubmit();
       return newCount;
     });
-  });
+  }, [handleSubmit]);
+
+  useFullscreen(hasStarted, handleViolation);
 
   useEffect(() => {
     const fetchTest = async () => {
@@ -66,6 +69,36 @@ const TestPage = () => {
 
   const question = test.questions[currentQ];
   const answeredCount = Object.keys(answers).length;
+
+  if (!hasStarted) {
+    return (
+      <div className="dashboard-wrapper">
+        <div style={{ maxWidth: '600px', margin: '40px auto', background: 'var(--card-bg)', padding: '2rem', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+          <h2 style={{ marginBottom: '1rem', color: 'var(--text)' }}>{test.title}</h2>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>{test.description || 'Welcome to the assessment.'}</p>
+          
+          <div style={{ background: 'rgba(255, 60, 60, 0.1)', borderLeft: '4px solid #ff4d4d', padding: '1rem', marginBottom: '2rem', borderRadius: '4px' }}>
+            <h4 style={{ color: '#ff4d4d', marginTop: 0 }}>Professional Exam Environment Rules</h4>
+            <ul style={{ margin: 0, paddingLeft: '1.2rem', color: 'var(--text)' }}>
+              <li>This test will open in <strong>Full Screen Mode</strong>.</li>
+              <li>Exiting Full Screen or switching tabs will result in a warning.</li>
+              <li>After 3 warnings, your test will be automatically submitted.</li>
+              <li>Keyboard shortcuts like copy/pasting are disabled.</li>
+              <li>Time duration: <strong>{test.duration} minutes</strong>.</li>
+            </ul>
+          </div>
+          
+          <button 
+            className="btn-primary" 
+            style={{ width: '100%', padding: '1rem', fontSize: '1.1rem', fontWeight: 'bold' }}
+            onClick={() => setHasStarted(true)}
+          >
+            Start Test Now
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="test-wrapper">
@@ -96,7 +129,7 @@ const TestPage = () => {
               Next
             </button>
             <button className="btn-submit" onClick={handleSubmit} disabled={submitting}>
-              {submitting ? 'Submitting...' : 'Submit Test'}
+              {submitting ? 'Submitting...' : 'End Test'}
             </button>
           </div>
         </div>

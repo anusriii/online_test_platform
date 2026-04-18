@@ -136,6 +136,37 @@ const StudentDashboard = () => {
           ))}
         </div>
       )}
+
+      {myResults.length > 0 && (
+        <div className="dashboard-results" style={{ marginTop: '4rem' }}>
+          <h2 style={{ marginBottom: '1.5rem' }}>My Recent Submissions</h2>
+          <div className="results-list" style={{ background: '#fff', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+            {myResults.slice().reverse().map((res) => (
+              <div key={res._id} className="list-item" style={{ padding: '1rem', borderBottom: '1px solid #f1f5f9' }}>
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ margin: 0, color: '#0f172a' }}>{res.test?.title}</h4>
+                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0' }}>
+                    Submitted on {new Date(res.createdAt).toLocaleDateString()} at {new Date(res.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ display: 'block', fontSize: '1.1rem', fontWeight: '800', color: res.passed ? '#10b981' : '#ef4444' }}>{res.percentage}%</span>
+                    <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase' }}>{res.passed ? 'PASSED' : 'FAILED'}</span>
+                  </div>
+                  <button 
+                    className="btn-secondary" 
+                    style={{ padding: '8px 16px', fontSize: '0.85rem' }}
+                    onClick={() => navigate(`/result/${res._id}`)}
+                  >
+                    Review Exam
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

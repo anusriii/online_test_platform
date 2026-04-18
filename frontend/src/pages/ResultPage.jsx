@@ -29,7 +29,7 @@ const ResultPage = () => {
 
   return (
     <div className="result-wrapper">
-      <h2>Result — {result.test?.title}</h2>
+      <h2>Result — {result.test.title}</h2>
       <ResultCard result={result} />
       <div className="result-details">
         <h3>Answer Review</h3>

@@ -44,7 +44,9 @@ const submitTest = async (req, res) => {
 const getMyResults = async (req, res) => {
   try {
     const results = await Result.find({ student: req.user._id }).populate('test', 'title');
-    res.json(results);
+    // Filter out results where the test has been deleted
+    const filteredResults = results.filter(result => result.test !== null);
+    res.json(filteredResults);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -55,7 +57,7 @@ const getResultById = async (req, res) => {
     const result = await Result.findById(req.params.id)
       .populate('test')
       .populate({ path: 'response', populate: { path: 'answers.question' } });
-    if (!result) return res.status(404).json({ message: 'Result not found' });
+    if (!result || !result.test) return res.status(404).json({ message: 'Result not found (test deleted)' });
     res.json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });

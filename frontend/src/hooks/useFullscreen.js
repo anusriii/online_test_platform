@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 
-const useFullscreen = (onViolation) => {
+const useFullscreen = (isActive, onViolation) => {
   useEffect(() => {
+    if (!isActive) return;
     const enterFullscreen = () => {
       const el = document.documentElement;
       if (el.requestFullscreen) el.requestFullscreen();
@@ -36,9 +37,9 @@ const useFullscreen = (onViolation) => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
       document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('keydown', handleKeyDown);
-      if (document.exitFullscreen) document.exitFullscreen();
+      if (document.exitFullscreen && document.fullscreenElement) document.exitFullscreen();
     };
-  }, []);
+  }, [isActive, onViolation]);
 };
 
 export default useFullscreen;

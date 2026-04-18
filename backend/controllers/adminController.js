@@ -15,7 +15,10 @@ const getAllResults = async (req, res) => {
     const results = await Result.find()
       .populate('student', 'name email')
       .populate('test', 'title');
-    res.json(results);
+    
+    // Filter out results where the test has been deleted
+    const filteredResults = results.filter(result => result.test !== null);
+    res.json(filteredResults);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
