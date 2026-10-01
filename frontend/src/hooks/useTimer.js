@@ -20,7 +20,7 @@ const useTimer = (durationInMinutes, onExpire) => {
       });
     }, 1000);
     return () => clearInterval(timerRef.current);
-  }, []);
+  }, [onExpire]);
 
   const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
   const seconds = String(timeLeft % 60).padStart(2, '0');
