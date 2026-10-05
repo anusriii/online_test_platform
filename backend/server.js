@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 
@@ -8,13 +7,32 @@ connectDB();
 
 const app = express();
 
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// CORS - handle manually
+app.use((req, res, next) => {
+  res.header(
+    'Access-Control-Allow-Origin',
+    'https://online-test-platform-jv6j7p7z5-anusri2.vercel.app'
+  );
 
-app.options('*', cors());
+  res.header('Access-Control-Allow-Credentials', 'true');
+
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
+  );
+
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+
+  // Handle browser preflight request
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
 
 app.use(express.json());
 
