@@ -16,7 +16,7 @@ const TestPage = () => {
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [violations, setViolations] = useState(0);
+  const [, setViolations] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
 
   const handleSubmit = useCallback(async () => {
