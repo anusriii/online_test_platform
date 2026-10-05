@@ -16,7 +16,7 @@ app.use(cors({
     'http://localhost:3003',
     'http://localhost:3004',
     'http://localhost:3005',
-    'https://online-test-platform-rho.vercel.app'
+    'https://online-test-platform-jv6j7p7z5-anusri2.vercel.app'
   ],
   credentials: true
 }));
