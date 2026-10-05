@@ -8,16 +8,13 @@ connectDB();
 
 const app = express();
 
-const corsOptions = {
-  origin: 'https://online-test-platform-jv6j7p7z5-anusri2.vercel.app',
-  credentials: true,
+app.use(cors({
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-};
+}));
 
-app.use(cors(corsOptions));
-
-app.options('*', cors(corsOptions));
+app.options('*', cors());
 
 app.use(express.json());
 
